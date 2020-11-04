@@ -96,7 +96,7 @@
                                 showConfirmButton: false
                             })
                                 .then (function() {
-                                    window.location.href = "{{ route('dashboard.index') }}";
+                                    window.location.href = "{{ route('blog.index') }}";
                                 });
 
                         } else {
