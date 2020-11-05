@@ -1,7 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 // use App\Http\Controllers\BlogController;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\ComingSoonController;
@@ -26,8 +27,8 @@ Route::get('/comingsoon', [ComingSoonController::class, 'index'])->name('comings
 // });
 
 Route::resource('blog', BlogController::class);
-Route::post('ckeditor/upload', [UploadController::class, 'upload'])->name('upload.upload');
-Route::post('ckeditor/store', [UploadController::class, 'store'])->name('upload.store');
+// Route::post('ckeditor/upload', [UploadController::class, 'upload'])->name('upload.upload');
+// Route::post('ckeditor/store', [UploadController::class, 'store'])->name('upload.store');
 
 Route::get('/register', [RegisterController::class, 'index'])->name('register.index');
 Route::post('/register', [RegisterController::class, 'store'])->name('register.store');
