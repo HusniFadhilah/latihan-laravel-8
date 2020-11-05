@@ -1,148 +1,77 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Register Akun</title>
-</head>
-<body>
+@extends('layouts.app')
 
-<div class="container" style="margin-top: 50px">
-    <div class="row">
-        <div class="col-md-5 offset-md-3">
+@section('content')
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
             <div class="card">
+                <div class="card-header">{{ __('Register') }}</div>
+
                 <div class="card-body">
-                    <label>REGISTER</label>
-                    <hr>
+                    <form method="POST" action="{{ route('register') }}">
+                        @csrf
 
-                    <div class="form-group">
-                        <label>Nama Lengkap</label>
-                        <input type="text" class="form-control" id="nama_lengkap" placeholder="Masukkan Nama Lengkap">
-                    </div>
+                        <div class="form-group row">
+                            <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Name') }}</label>
 
-                    <div class="form-group">
-                        <label>Alamat Email</label>
-                        <input type="email" class="form-control" id="email" placeholder="Masukkan Alamat Email">
-                    </div>
+                            <div class="col-md-6">
+                                <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
 
-                    <div class="form-group">
-                        <label>Password</label>
-                        <input type="password" class="form-control" id="password" placeholder="Masukkan Password">
-                    </div>
+                                @error('name')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
 
-                    <button class="btn btn-register btn-block btn-success">REGISTER</button>
+                        <div class="form-group row">
+                            <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>
 
+                            <div class="col-md-6">
+                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email">
 
+                                @error('email')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
+
+                                @error('password')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="password-confirm" class="col-md-4 col-form-label text-md-right">{{ __('Confirm Password') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
+                            </div>
+                        </div>
+
+                        <div class="form-group row mb-0">
+                            <div class="col-md-6 offset-md-4">
+                                <button type="submit" class="btn btn-primary">
+                                    {{ __('Register') }}
+                                </button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
-
-            <div class="text-center" style="margin-top: 15px">
-                Sudah punya akun? <a href="/login">Silahkan Login</a>
-            </div>
-
         </div>
     </div>
 </div>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" ></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/8.11.8/sweetalert2.all.min.js"></script>
-
-<script>
-    $(document).ready(function() {
-
-        $(".btn-register").click( function() {
-
-            var nama_lengkap = $("#nama_lengkap").val();
-            var email    = $("#email").val();
-            var password = $("#password").val();
-            var token = $("meta[name='csrf-token']").attr("content");
-
-            if (nama_lengkap.length == "") {
-
-                Swal.fire({
-                    type: 'warning',
-                    title: 'Oops...',
-                    text: 'Nama Lengkap Wajib Diisi !'
-                });
-
-            } else if(email.length == "") {
-
-                Swal.fire({
-                    type: 'warning',
-                    title: 'Oops...',
-                    text: 'Alamat Email Wajib Diisi !'
-                });
-
-            } else if(password.length == "") {
-
-                Swal.fire({
-                    type: 'warning',
-                    title: 'Oops...',
-                    text: 'Password Wajib Diisi !'
-                });
-
-            } else {
-
-                //ajax
-                $.ajax({
-
-                    url: "{{ route('register.store') }}",
-                    type: "POST",
-                    cache: false,
-                    data: {
-                        "nama_lengkap": nama_lengkap,
-                        "email": email,
-                        "password": password,
-                        "_token": token
-                    },
-
-                    success:function(response){
-
-                        if (response.success) {
-
-                            Swal.fire({
-                                type: 'success',
-                                title: 'Register Berhasil!',
-                                text: 'silahkan login!'
-                            });
-
-                            $("#nama_lengkap").val('');
-                            $("#email").val('');
-                            $("#password").val('');
-
-                        } else {
-
-                            Swal.fire({
-                                type: 'error',
-                                title: 'Register Gagal!',
-                                text: 'silahkan coba lagi!'
-                            });
-
-                        }
-
-                        console.log(response);
-
-                    },
-
-                    error:function(response){
-                        Swal.fire({
-                            type: 'error',
-                            title: 'Opps!',
-                            text: 'server error!'
-                        });
-                    }
-
-                })
-
-            }
-
-        });
-
-    });
-</script>
-
-</body>
-</html>
+@endsection
